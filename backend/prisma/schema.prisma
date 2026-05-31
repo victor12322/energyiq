@@ -1,0 +1,109 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x", "rhel-openssl-1.0.x", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Company {
+  id             String   @id @default(cuid())
+  name           String
+  email          String   @unique
+  passwordHash   String
+  role           String   @default("CLIENT")
+  emissionFactor Float    @default(0.4)
+  currency       String   @default("EUR")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  tariffBands   TariffBand[]
+  machines      Machine[]
+  monthlyBills  MonthlyBill[]
+  meterReadings MeterReading[]
+  subscription  Subscription?
+}
+
+model Subscription {
+  id                   String    @id @default(cuid())
+  companyId            String    @unique
+  company              Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  stripeCustomerId     String?   @unique
+  stripeSubscriptionId String?   @unique
+  stripePriceId        String?
+  plan                 String?   // "starter" | "growth" | "enterprise"
+  status               String    @default("trialing") // "trialing" | "active" | "past_due" | "canceled"
+  currentPeriodEnd     DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+}
+
+model TariffBand {
+  id          String   @id @default(cuid())
+  companyId   String
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  name        String
+  pricePerKwh Float
+  startHour   Int
+  endHour     Int
+  color       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([companyId, name])
+}
+
+model Machine {
+  id             String   @id @default(cuid())
+  companyId      String
+  company        Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  name           String
+  ratedPowerKw   Float
+  dailyHours     Float
+  tariffBandName String?
+  description    String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  meterReadings MeterReading[]
+}
+
+model MonthlyBill {
+  id         String   @id @default(cuid())
+  companyId  String
+  company    Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  month      Int
+  year       Int
+  totalCost  Float
+  totalKwh   Float
+  currency   String
+  notes      String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  bandBreakdowns BillBandBreakdown[]
+
+  @@unique([companyId, month, year])
+}
+
+model BillBandBreakdown {
+  id       String      @id @default(cuid())
+  billId   String
+  bill     MonthlyBill @relation(fields: [billId], references: [id], onDelete: Cascade)
+  bandName String
+  kwh      Float
+  cost     Float
+}
+
+model MeterReading {
+  id        String   @id @default(cuid())
+  companyId String
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  machineId String?
+  machine   Machine? @relation(fields: [machineId], references: [id])
+  timestamp DateTime
+  kwhDelta  Float
+  createdAt DateTime @default(now())
+}

@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply antialiased;
+    background-color: #09090b;
+    color: #f4f4f5;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  .font-display {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900;
+  }
+  .btn-primary {
+    @apply btn bg-green-500 text-black hover:bg-green-400 focus:ring-green-500;
+  }
+  .btn-secondary {
+    @apply btn bg-zinc-800 text-zinc-200 border border-zinc-700 hover:bg-zinc-700 focus:ring-zinc-600;
+  }
+  .btn-danger {
+    @apply btn bg-red-600 text-white hover:bg-red-500 focus:ring-red-500;
+  }
+  .input {
+    @apply block w-full rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-sm text-zinc-100 shadow-sm placeholder-zinc-500
+           focus:border-green-500 focus:outline-none focus:ring-1 focus:ring-green-500;
+  }
+  .label {
+    @apply block text-sm font-medium text-zinc-400 mb-1;
+  }
+  .card {
+    @apply bg-zinc-900 rounded-xl border border-zinc-800;
+  }
+}
+
+/* Landing page fade-in */
+.fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.fade-up.in-view {
+  opacity: 1;
+  transform: translateY(0);
+}

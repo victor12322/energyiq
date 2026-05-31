@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Start-Sleep -Seconds 4; Invoke-WebRequest -Uri \"http://localhost:3001/api/health\" -UseBasicParsing 2>&1 | Select-Object -ExpandProperty Content)",
+      "PowerShell(cd C:\\\\Users\\\\hp\\\\climate\\\\backend; $env:NODE_ENV=\"development\"; npx ts-node --transpile-only src/index.ts)",
+      "PowerShell(Start-Sleep -Seconds 5; Invoke-WebRequest -Uri \"http://localhost:3001/api/health\" -UseBasicParsing | Select-Object -ExpandProperty Content)",
+      "PowerShell($login = Invoke-WebRequest -Uri \"http://localhost:3001/api/auth/login\" -Method POST -ContentType \"application/json\" -Body '{\"email\":\"acme@example.com\",\"password\":\"acme123\"}' -UseBasicParsing | Select-Object -ExpandProperty Content | ConvertFrom-Json; $token = $login.token; Write-Host \"Logged in as: $\\($login.company.name\\)\"; $analysis = Invoke-WebRequest -Uri \"http://localhost:3001/api/analysis\" -Headers @{Authorization=\"Bearer $token\"} -UseBasicParsing | Select-Object -ExpandProperty Content | ConvertFrom-Json; Write-Host \"Monthly cost: $\\($analysis.currency\\) $\\($analysis.totalMonthlyCost\\)\"; Write-Host \"Potential saving: $\\($analysis.currency\\) $\\($analysis.totalPotentialSaving\\)\"; Write-Host \"Recommendations: $\\($analysis.recommendations.Count\\)\"; Write-Host \"CO2 footprint: $\\($analysis.totalCo2TonsMonth\\) t/mo\")",
+      "PowerShell($login = Invoke-WebRequest -Uri \"http://localhost:3001/api/auth/login\" -Method POST -ContentType \"application/json\" -Body '{\"email\":\"acme@example.com\",\"password\":\"acme123\"}' -UseBasicParsing | Select-Object -ExpandProperty Content | ConvertFrom-Json; $token = $login.token; $pdf = Invoke-WebRequest -Uri \"http://localhost:3001/api/reports/pdf\" -Headers @{Authorization=\"Bearer $token\"} -UseBasicParsing; Write-Host \"PDF status: $\\($pdf.StatusCode\\), size: $\\($pdf.RawContentLength\\) bytes, type: $\\($pdf.Headers.'Content-Type'\\)\")",
+      "PowerShell(Stop-Process *)",
+      "PowerShell(Start-Sleep -Seconds 5; $login = Invoke-WebRequest -Uri \"http://localhost:3001/api/auth/login\" -Method POST -ContentType \"application/json\" -Body '{\"email\":\"acme@example.com\",\"password\":\"acme123\"}' -UseBasicParsing | Select-Object -ExpandProperty Content | ConvertFrom-Json; $token = $login.token; try { $pdf = Invoke-WebRequest -Uri \"http://localhost:3001/api/reports/pdf\" -Headers @{Authorization=\"Bearer $token\"} -UseBasicParsing; Write-Host \"PDF OK: $\\($pdf.RawContentLength\\) bytes, Content-Type: $\\($pdf.Headers.'Content-Type'\\)\" } catch { Write-Host \"PDF ERROR: $_\" })",
+      "PowerShell(claude mcp *)",
+      "PowerShell(Start-Sleep -Seconds 5; $login = Invoke-WebRequest -Uri \"http://localhost:3001/api/auth/login\" -Method POST -ContentType \"application/json\" -Body '{\"email\":\"acme@example.com\",\"password\":\"acme123\"}' -UseBasicParsing | Select-Object -ExpandProperty Content | ConvertFrom-Json; $token = $login.token; Write-Host \"Login OK: $\\($login.company.name\\)\"; $a = Invoke-WebRequest -Uri \"http://localhost:3001/api/analysis\" -Headers @{Authorization=\"Bearer $token\"} -UseBasicParsing | Select-Object -ExpandProperty Content | ConvertFrom-Json; Write-Host \"Monthly cost: $\\($a.currency\\) $\\([math]::Round\\($a.totalMonthlyCost,2\\)\\)\"; Write-Host \"Potential saving: $\\($a.currency\\) $\\([math]::Round\\($a.totalPotentialSaving,2\\)\\) \\($\\([math]::Round\\($a.totalPotentialSavingPercent,1\\)\\)%\\)\"; Write-Host \"Recommendations: $\\($a.recommendations.Count\\)\"; Write-Host \"CO2 footprint: $\\([math]::Round\\($a.totalCo2TonsMonth,3\\)\\) t/mo\")",
+      "PowerShell(Start-Sleep -Seconds 8; Invoke-WebRequest -Uri \"http://localhost:3001/api/health\" -UseBasicParsing | Select-Object -ExpandProperty Content)",
+      "PowerShell(Invoke-WebRequest -Uri \"http://localhost:5173\" -UseBasicParsing | Select-Object -ExpandProperty StatusCode)",
+      "PowerShell(Start-Process \"http://localhost:5173\")",
+      "PowerShell(Start-Sleep -Seconds 7; Invoke-WebRequest \"http://localhost:3001/api/health\" -UseBasicParsing | Select-Object -ExpandProperty Content; Invoke-WebRequest \"http://localhost:5173\" -UseBasicParsing | Select-Object -ExpandProperty StatusCode)",
+      "PowerShell(Start-Sleep -Seconds 8; Invoke-WebRequest \"http://localhost:3001/api/health\" -UseBasicParsing | Select-Object -ExpandProperty Content)",
+      "PowerShell(stripe *)",
+      "PowerShell(winget install *)",
+      "PowerShell(stripe login *)",
+      "PowerShell(Start-Process \"https://dashboard.stripe.com/stripecli/confirm_auth?t=iPy9htWFkiW3kbTkGHgP0qlp6mvl1VkE\")",
+      "PowerShell(stripe listen *)",
+      "PowerShell($login = Invoke-WebRequest \"http://localhost:3001/api/auth/login\" -Method POST -ContentType \"application/json\" -Body '{\"email\":\"acme@example.com\",\"password\":\"acme123\"}' -UseBasicParsing | Select-Object -ExpandProperty Content | ConvertFrom-Json; $token = $login.token; $checkout = Invoke-WebRequest \"http://localhost:3001/api/billing/checkout\" -Method POST -ContentType \"application/json\" -Headers @{Authorization=\"Bearer $token\"} -Body '{\"plan\":\"growth\"}' -UseBasicParsing | Select-Object -ExpandProperty Content | ConvertFrom-Json; Start-Process $checkout.url)",
+      "PowerShell(Start-Process \"http://localhost:5173/dashboard\")",
+      "PowerShell(Invoke-WebRequest \"http://localhost:3001/api/health\" -UseBasicParsing -TimeoutSec 3 | Select-Object -ExpandProperty Content)",
+      "PowerShell(Start-Sleep -Seconds 7; Invoke-WebRequest \"http://localhost:3001/api/health\" -UseBasicParsing | Select-Object -ExpandProperty Content)",
+      "PowerShell(Start-Process \"http://localhost:5173/login\")",
+      "PowerShell(supabase *)",
+      "PowerShell(npm install *)",
+      "PowerShell(supabase login *)",
+      "PowerShell(11)",
+      "PowerShell(vercel login *)",
+      "PowerShell(Invoke-WebRequest \"https://energyiq-backend.vercel.app/api/health\" -UseBasicParsing | Select-Object -ExpandProperty Content)",
+      "PowerShell(Start-Sleep -Seconds 3; Invoke-WebRequest \"https://energyiq-backend.vercel.app/api/health\" -UseBasicParsing | Select-Object -ExpandProperty Content)",
+      "PowerShell(Start-Sleep -Seconds 4; Invoke-WebRequest \"https://energyiq-backend.vercel.app/api/health\" -UseBasicParsing | Select-Object -ExpandProperty Content)",
+      "PowerShell(Start-Sleep -Seconds 4; $r = Invoke-WebRequest \"https://energyiq-backend.vercel.app/api/auth/login\" -Method POST -ContentType \"application/json\" -Body '{\"email\":\"acme@example.com\",\"password\":\"acme123\"}' -UseBasicParsing; Write-Host $r.StatusCode $r.Content.Substring\\(0,80\\))",
+      "PowerShell(vercel logs *)",
+      "PowerShell(railway *)",
+      "PowerShell(Start-Process \"https://railway.app\")"
+    ]
+  }
+}

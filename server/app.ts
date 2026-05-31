@@ -12,22 +12,17 @@ import { billingRouter } from './routes/billing';
 
 const app = express();
 
-const allowedOrigins = [
-  process.env.FRONTEND_URL || 'http://localhost:5173',
-  'https://energyiq.vercel.app',
-].filter(Boolean);
+// Auth is via Bearer token (not cookies), so a permissive CORS policy is safe.
+// In production the frontend and API are same-origin, so CORS is a non-issue.
+app.use(cors({ origin: true }));
 
-app.use(cors({
-  origin: (origin, cb) => {
-    if (!origin || allowedOrigins.some((o) => origin.startsWith(o))) cb(null, true);
-    else cb(new Error('Not allowed by CORS'));
-  },
-  credentials: true,
-}));
-
-// Stripe webhook must receive raw body — mount before express.json()
+// Stripe webhook must receive the raw body — mount before express.json()
 app.use('/api/billing/webhook', express.raw({ type: 'application/json' }));
 app.use(express.json());
+
+app.get('/api/health', (_req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
 
 app.use('/api/auth', authRouter);
 app.use('/api/tariffs', tariffsRouter);
@@ -38,10 +33,6 @@ app.use('/api/analysis', analysisRouter);
 app.use('/api/reports', reportsRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/billing', billingRouter);
-
-app.get('/api/health', (_req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
-});
 
 app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error(err);

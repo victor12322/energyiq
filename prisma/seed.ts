@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
-import { simulateReadings } from '../src/services/meterSimulator';
+import { simulateReadings } from '../server/services/meterSimulator';
 
 const prisma = new PrismaClient();
 

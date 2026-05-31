@@ -1,12 +1,11 @@
 import { Router, Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '../lib/prisma';
 import { authMiddleware, signToken } from '../middleware/auth';
 import { Role } from '../types';
 
 const router = Router();
-const prisma = new PrismaClient();
 
 const registerSchema = z.object({
   name: z.string().min(2).max(100),

@@ -13,7 +13,8 @@
     "db:seed": "ts-node --transpile-only prisma/seed.ts",
     "db:reset": "prisma db push --force-reset && ts-node --transpile-only prisma/seed.ts",
     "simulate": "ts-node --transpile-only src/services/meterSimulator.ts",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "vercel-build": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^5.7.0",

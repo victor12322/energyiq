@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { pathToFileURL } from 'node:url';
 
 const prisma = new PrismaClient();
 
@@ -76,7 +77,7 @@ export async function simulateReadings(companyId: string, days = 30): Promise<nu
 }
 
 // CLI entrypoint: run `npm run simulate` from the backend dir
-if (require.main === module) {
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
   const companyEmail = process.argv[2];
   if (!companyEmail) {
     console.error('Usage: ts-node meterSimulator.ts <company-email>');

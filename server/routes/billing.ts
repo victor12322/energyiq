@@ -1,6 +1,5 @@
 import { Router, Request, Response } from 'express';
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const StripeLib = require('stripe');
+import StripeLib from 'stripe';
 import { PrismaClient } from '@prisma/client';
 import { authMiddleware } from '../middleware/auth';
 
